@@ -1,0 +1,19 @@
+<?php
+
+namespace DummyNamespace;
+
+use AesirCloud\LaravelActions\Action;
+
+class DummyClass extends Action
+{
+    /**
+     * Execute the action.
+     *
+     * @param mixed ...$params
+     * @return mixed
+     */
+    public function handle(...$params): mixed
+    {
+        // Your action logic here.
+    }
+}

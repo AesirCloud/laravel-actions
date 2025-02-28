@@ -1,0 +1,42 @@
+{
+  "name": "aesircloud/laravel-actions",
+  "description": "A simple Actions package for Laravel with job/queue/controller support.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Greg Upton",
+      "email": "greg@aesircloud.com"
+    }
+  ],
+  "require": {
+    "php": "^8.3",
+    "illuminate/support": "^11.0|^12.0",
+    "illuminate/console": "^11.0|^12.0",
+    "laravel/framework": "^11.0|^12.0"
+  },
+  "homepage": "https://github.com/AesirCloud/laravel-actions",
+  "autoload": {
+    "psr-4": {
+      "AesirCloud\\LaravelActions\\": "src/",
+      "Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "AesirCloud\\LaravelActions\\Providers\\ActionsServiceProvider"
+      ]
+    }
+  },
+  "require-dev": {
+    "pestphp/pest": "^3.7",
+    "orchestra/testbench": "^10.0",
+    "pestphp/pest-plugin-laravel": "^3.1"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
+}
