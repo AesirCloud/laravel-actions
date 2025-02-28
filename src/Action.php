@@ -15,20 +15,6 @@ abstract class Action implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Primary logic for your action.
-     *
-     * If your child class needs typed parameters, just override it with them:
-     *   public function handle(string $orderId, array $items): mixed { ... }
-     *
-     * Or keep it variadic:
-     *   public function handle(...$params): mixed { ... }
-     *
-     * @param  mixed  ...$params
-     * @return mixed
-     */
-    abstract public function handle(...$params): mixed;
-
-    /**
      * Run the action synchronously (no queue).
      *
      * @param  mixed  ...$arguments
@@ -36,14 +22,9 @@ abstract class Action implements ShouldQueue
      */
     public static function run(mixed ...$arguments): mixed
     {
-        // Instantiate with constructor arguments
         $action = new static(...$arguments);
 
-        // Pass those same arguments to handle(...) if you prefer:
-        return $action->handle(...$arguments);
-
-        // Or if your child Action uses constructor injection only:
-        // return $action->handle();
+        return call_user_func_array([$action, 'handle'], $arguments);
     }
 
     /**
@@ -55,7 +36,7 @@ abstract class Action implements ShouldQueue
     public static function dispatch(mixed ...$arguments): PendingDispatch
     {
         // Similarly, pass arguments into constructor
-        return new static(...$arguments)->queue();
+        return (new static(...$arguments))->queue();
     }
 
     /**
