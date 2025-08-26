@@ -4,6 +4,8 @@
 
 A simple actions package for Laravel.
 
+> **Requirements:** PHP 8.4+ and Laravel 12.
+
 ---
 
 <p align="center">
