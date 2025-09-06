@@ -35,6 +35,10 @@ abstract class Action implements ShouldQueue
      */
     public static function dispatch(mixed ...$arguments): PendingDispatch
     {
+        if ($arguments === []) {
+            return dispatch(new static());
+        }
+
         return dispatch(function () use ($arguments) {
             return (new static())->handle(...$arguments);
         });

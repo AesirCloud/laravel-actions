@@ -9,6 +9,7 @@ All notable changes to `aesircloud/laravel-actions` will be documented in this f
 - Improve default `asController` to throw when `handle` requires parameters.
 - Inject `Filesystem` into `MakeActionCommand`.
 - Align stub publish tag with README and update scaffold command references.
+- Queueing an action without parameters now dispatches the action instance instead of a closure.
 
 ## 1.1.0 - 2025-08-26
 - Drop Laravel 11 support and require PHP 8.4.
