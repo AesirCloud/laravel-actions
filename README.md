@@ -53,7 +53,7 @@ php artisan vendor:publish --tag=actions-stubs
 To scaffold a new action, run the following command:
 
 ```php
-php artisan handle:action {ActionName}
+php artisan make:action {ActionName}
 ```
 
 This will create a new action class in the `app/Actions` directory.
@@ -61,7 +61,7 @@ This will create a new action class in the `app/Actions` directory.
 ### Basic Example
 
 ```php
-php artisan handle:action CreateUser
+php artisan make:action CreateUser
 ```
 
 Creates an action file under `app/Actions/CreateUser.php`.

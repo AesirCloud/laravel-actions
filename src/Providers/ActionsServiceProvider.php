@@ -21,7 +21,7 @@ class ActionsServiceProvider extends ServiceProvider
             // Publish stubs (optional)
             $this->publishes([
                 __DIR__ . '/../stubs/action.stub' => base_path('stubs/action.stub'),
-            ], 'laravel-actions-stubs');
+            ], 'actions-stubs');
         }
     }
 

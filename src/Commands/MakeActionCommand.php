@@ -17,10 +17,10 @@ class MakeActionCommand extends Command
     protected string $defaultNamespace = 'App\\Actions';
     protected Filesystem $files;
 
-    public function __construct()
+    public function __construct(Filesystem $files)
     {
         parent::__construct();
-        $this->files = new Filesystem;
+        $this->files = $files;
     }
 
     public function handle(): int

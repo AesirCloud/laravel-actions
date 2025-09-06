@@ -22,9 +22,9 @@ abstract class Action implements ShouldQueue
      */
     public static function run(mixed ...$arguments): mixed
     {
-        $action = new static(...$arguments);
+        $action = new static();
 
-        return call_user_func_array([$action, 'handle'], $arguments);
+        return $action->handle(...$arguments);
     }
 
     /**
@@ -35,8 +35,13 @@ abstract class Action implements ShouldQueue
      */
     public static function dispatch(mixed ...$arguments): PendingDispatch
     {
-        // Similarly, pass arguments into constructor
-        return (new static(...$arguments))->queue();
+        if ($arguments === []) {
+            return dispatch(new static());
+        }
+
+        return dispatch(function () use ($arguments) {
+            return (new static())->handle(...$arguments);
+        });
     }
 
     /**
@@ -63,8 +68,11 @@ abstract class Action implements ShouldQueue
      */
     public function asController(Request $request): mixed
     {
-        // e.g., $data = $request->validate(...);
-        // return $this->handle($data);
+        $method = new \ReflectionMethod($this, 'handle');
+
+        if ($method->getNumberOfRequiredParameters() > 0) {
+            throw new \BadMethodCallException(static::class.'::handle requires parameters. Override asController() to provide them.');
+        }
 
         return $this->handle();
     }
