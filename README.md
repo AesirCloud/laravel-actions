@@ -4,7 +4,7 @@
 
 A simple actions package for Laravel.
 
-> **Requirements:** PHP 8.4+ and Laravel 12.
+> **Requirements:** PHP 8.5+ and Laravel 13.
 
 ---
 

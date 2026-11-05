@@ -4,6 +4,11 @@ All notable changes to `aesircloud/laravel-actions` will be documented in this f
 
 ---
 
+## 1.2.0 - 2026-11-05
+- Require Laravel 13 and PHP 8.5; older Laravel and PHP versions are no longer supported.
+- Upgrade the test suite to Pest 4 and Orchestra Testbench 11.
+- Run CI tests on PHP 8.5.
+
 ## 1.1.1 - 2025-09-06
 - Simplify `Action::run` and `dispatch` to avoid passing arguments to the constructor.
 - Improve default `asController` to throw when `handle` requires parameters.
