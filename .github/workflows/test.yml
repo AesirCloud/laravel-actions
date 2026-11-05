@@ -14,12 +14,11 @@ jobs:
 
     strategy:
       matrix:
-        # You can add more PHP versions here if you'd like
-        php: [ '8.4' ]
+        php: [ '8.5' ]
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
