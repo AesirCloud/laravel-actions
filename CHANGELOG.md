@@ -4,6 +4,10 @@ All notable changes to `aesircloud/laravel-actions` will be documented in this f
 
 ---
 
+## 1.2.1 - 2026-11-20
+
+- Add required PHP 8.6 coverage and compatible Pest branches without changing the runtime minimum.
+
 ## 1.2.0 - 2026-11-05
 - Require Laravel 13 and PHP 8.5; older Laravel and PHP versions are no longer supported.
 - Upgrade the test suite to Pest 4 and Orchestra Testbench 11.
