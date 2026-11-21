@@ -1,34 +1,63 @@
-name: Run Tests
-
+name: Compatibility
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+    tags: ['[0-9]*.[0-9]*.[0-9]*']
   pull_request:
-    branches:
-      - main
-
+    branches: [main]
+permissions:
+  contents: read
 jobs:
-  laravel-tests:
+  php:
     runs-on: ubuntu-latest
-
     strategy:
+      fail-fast: false
       matrix:
-        php: [ '8.5', '8.6' ]
-
+        php: ['8.3', '8.4', '8.5', '8.6']
+        laravel: ['^13.30']
     steps:
-      - name: Check out code
-        uses: actions/checkout@v7
-
-      - name: Install PHP
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: xdebug
+          extensions: mbstring, intl, dom, pdo_sqlite, sqlite3
+          coverage: none
+          tools: composer:v2
+      - run: composer update --with="laravel/framework:${{ matrix.laravel }}" --with-all-dependencies --prefer-dist --no-interaction --no-progress
+      - run: composer install --prefer-dist --no-interaction --no-progress
+      - run: composer validate --strict
+      - run: composer check-platform-reqs
+      - run: composer audit --locked
+      - run: vendor/bin/pest
 
-      - name: Install composer dependencies
-        run: composer install --no-progress --no-interaction --prefer-dist
-
-      - name: Run tests (Pest)
+  release:
+    needs: php
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Prepare dated release notes
         run: |
-          ./vendor/bin/pest
+          python3 - <<'PYRELEASE'
+          import datetime
+          import os
+          import pathlib
+          import re
+
+          version = os.environ['GITHUB_REF_NAME']
+          stable = r'(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)'
+          if re.fullmatch(stable, version) is None:
+              raise SystemExit('A stable unprefixed version tag is required.')
+          changelog = pathlib.Path('CHANGELOG.md').read_text()
+          matches = list(re.finditer(rf'^## {re.escape(version)} - (\d{{4}}-\d{{2}}-\d{{2}})\r?\n(.*?)(?=^## |\Z)', changelog, re.M | re.S))
+          if len(matches) != 1 or not matches[0].group(2).strip():
+              raise SystemExit('A dated changelog entry is required for this exact release.')
+          datetime.date.fromisoformat(matches[0].group(1))
+          pathlib.Path(os.environ['RUNNER_TEMP'], 'release-notes.md').write_text(matches[0].group(2).strip() + '\n')
+          PYRELEASE
+      - name: Publish verified stable release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --verify-tag --title "$GITHUB_REF_NAME" --notes-file "$RUNNER_TEMP/release-notes.md" --latest

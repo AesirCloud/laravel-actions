@@ -1,10 +1,12 @@
+Version 1.3 supports PHP 8.3–8.6. Existing APIs and framework support are retained.
+
 # READ ME
 
 ---
 
 A simple actions package for Laravel.
 
-> **Requirements:** PHP 8.5+ and Laravel 13.
+> **Requirements:** PHP 8.3+ and Laravel 13.
 
 ---
 
